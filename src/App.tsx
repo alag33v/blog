@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
-import { addPost } from './redux/ducks/postsDucks';
+import { getPosts } from './redux/ducks/postsDucks';
 import { Post } from './types';
 import { AppStateType } from './redux/ducks';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,17 +15,7 @@ export const App: FC = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   useEffect(() => {
-    const getPosts = async () => {
-      try {
-        const response = await axios.get<Post[]>(
-          'https://bloggy-api.herokuapp.com/posts',
-        );
-        dispatch(addPost(response.data));
-      } catch (error) {
-        toast.error(error.message);
-      }
-    };
-    getPosts();
+    dispatch(getPosts());
   }, []);
 
   const newPost = () => {

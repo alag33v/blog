@@ -1,7 +1,12 @@
+/* eslint-disable import/no-cycle */
+import { ThunkAction } from 'redux-thunk';
+import { toast } from 'react-toastify';
+import { AppStateType } from './index';
 import { Post } from '../../types';
+import { postsAPI } from '../../api/api';
 
 // Actions
-const GET_POSTS = 'posts/GET_POSTS';
+const ADD_POSTS = 'posts/ADD_POSTS';
 
 // Reducer
 type InitialStateType = {
@@ -12,14 +17,14 @@ const initialState: InitialStateType = {
   posts: [],
 };
 
-type ActionsType = AddPostType;
+type ActionsType = AddPostsType;
 
 export const postsReducer = (
   state = initialState,
   action: ActionsType,
 ): InitialStateType => {
   switch (action.type) {
-    case GET_POSTS:
+    case ADD_POSTS:
       return { ...state, posts: action.payload };
     default:
       return state;
@@ -27,12 +32,25 @@ export const postsReducer = (
 };
 
 // Action Creators
-type AddPostType = {
-  type: typeof GET_POSTS;
+type AddPostsType = {
+  type: typeof ADD_POSTS;
   payload: Post[];
 };
 
-export const addPost = (arr: Post[]): AddPostType => ({
-  type: GET_POSTS,
+export const addPosts = (arr: Post[]): AddPostsType => ({
+  type: ADD_POSTS,
   payload: arr,
 });
+
+// Thunks
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
+
+export const getPosts = (): ThunkType => async (dispatch) => {
+  try {
+    const data = await postsAPI.fetchPosts();
+    dispatch(addPosts(data));
+    toast.success('Success');
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
