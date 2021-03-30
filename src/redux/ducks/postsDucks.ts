@@ -8,6 +8,7 @@ import { postsAPI } from '../../api/api';
 // Actions
 const ADD_POSTS = 'posts/ADD_POSTS';
 const NEW_POST = 'posts/NEW_POST';
+const DELETE_POST = 'posts/DELETE_POST';
 
 // Reducer
 type InitialStateType = {
@@ -18,7 +19,7 @@ const initialState: InitialStateType = {
   posts: [],
 };
 
-type ActionsType = AddPostsType | NewPostType;
+type ActionsType = AddPostsType | NewPostType | DeletePostType;
 
 export const postsReducer = (
   state = initialState,
@@ -29,6 +30,11 @@ export const postsReducer = (
       return { ...state, posts: action.payload };
     case NEW_POST:
       return { ...state, posts: [...state.posts, action.payload] };
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: [...state.posts.filter((post) => post.id !== action.payload)],
+      };
     default:
       return state;
   }
@@ -55,6 +61,16 @@ export const newPost = (obj: Post): NewPostType => ({
   payload: obj,
 });
 
+type DeletePostType = {
+  type: typeof DELETE_POST;
+  payload: number | string;
+};
+
+export const deletePost = (id: number | string): DeletePostType => ({
+  type: DELETE_POST,
+  payload: id,
+});
+
 // Thunks
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
@@ -70,9 +86,21 @@ export const getPosts = (): ThunkType => async (dispatch) => {
 
 export const createNewPost = (newObj: Post): ThunkType => async (dispatch) => {
   try {
-    const data = await postsAPI.sendPost(newObj);
+    const data = await postsAPI.addPost(newObj);
     dispatch(newPost(data));
     toast.success('Post created');
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const removePost = (id: number | string): ThunkType => async (
+  dispatch,
+) => {
+  try {
+    postsAPI.deletePost(id);
+    dispatch(deletePost(id));
+    toast.success('Post deleted');
   } catch (error) {
     toast.error(error.message);
   }

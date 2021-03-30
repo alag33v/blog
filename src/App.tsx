@@ -1,9 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { ToastContainer } from 'react-toastify';
-import { getPosts, createNewPost } from './redux/ducks/postsDucks';
+import { getPosts, createNewPost, removePost } from './redux/ducks/postsDucks';
 import { Post } from './types';
 import { AppStateType } from './redux/ducks';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,7 +31,7 @@ export const App: FC = () => {
   };
 
   const deletePost = (id: number | string) => {
-    axios.delete(`https://bloggy-api.herokuapp.com/posts/${id}`);
+    dispatch(removePost(id));
   };
 
   return (

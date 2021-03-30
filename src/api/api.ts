@@ -10,8 +10,12 @@ export const postsAPI = {
     const response = await instance.get('/posts');
     return response.data;
   },
-  async sendPost(newObj: Post): Promise<Post> {
+  async addPost(newObj: Post): Promise<Post> {
     const response = await instance.post('/posts', newObj);
+    return response.data;
+  },
+  async deletePost(id: number | string): Promise<string> {
+    const response = await instance.delete(`/posts/${id}`);
     return response.data;
   },
 };
