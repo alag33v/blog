@@ -1,17 +1,17 @@
 import React, { FC, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
+import { addPost } from './redux/ducks/postsDucks';
+import { Post } from './types';
+import { AppStateType } from './redux/ducks';
 import 'react-toastify/dist/ReactToastify.css';
 
-type Post = {
-  id: number | string;
-  title: string;
-  body: string;
-};
+export const App: FC = () => {
+  const { posts } = useSelector((state: AppStateType) => state.posts);
+  const dispatch = useDispatch();
 
-const App: FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   useEffect(() => {
@@ -20,7 +20,7 @@ const App: FC = () => {
         const response = await axios.get<Post[]>(
           'https://bloggy-api.herokuapp.com/posts',
         );
-        setPosts(response.data);
+        dispatch(addPost(response.data));
       } catch (error) {
         toast.error(error.message);
       }
@@ -77,5 +77,3 @@ const App: FC = () => {
     </div>
   );
 };
-
-export default App;
