@@ -45,15 +45,22 @@ const App: FC = () => {
     }
   };
 
+  const deletePost = (id: number | string) => {
+    axios.delete(`https://bloggy-api.herokuapp.com/posts/${id}`);
+  };
+
   return (
     <div>
       <h1 className="title">React!</h1>
       <div>Posts</div>
       <ul>
-        {posts.map((item) => (
-          <li key={item.id}>
-            <div>{item.title}</div>
-            <div>{item.body}</div>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <div>{post.title}</div>
+            <div>{post.body}</div>
+            <button type="button" onClick={() => deletePost(post.id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
