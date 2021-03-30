@@ -18,4 +18,15 @@ export const postsAPI = {
     const response = await instance.delete(`/posts/${id}`);
     return response.data;
   },
+  async editPost(obj: Post): Promise<Post> {
+    const response = await instance.put(`/posts/${obj.id}`, obj);
+    return response.data;
+  },
+};
+
+export const commentsAPI = {
+  async fetchComments(id: number | string): Promise<Post[]> {
+    const response = await instance.get(`/posts/${id}?_embed=comments`);
+    return response.data;
+  },
 };
