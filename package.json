@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
@@ -20,6 +21,8 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.2",
+    "styled-normalize": "^8.0.7",
     "typescript": "^4.1.2",
     "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"
@@ -53,6 +56,7 @@
   "devDependencies": {
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
+    "@types/styled-components": "^5.1.9",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",

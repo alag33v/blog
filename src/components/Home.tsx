@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { MdModeEdit } from 'react-icons/md';
 import {
   getPosts,
   createNewPost,
@@ -11,6 +13,7 @@ import {
 } from '../redux/ducks/postsDucks';
 import { Post } from '../types';
 import { AppStateType } from '../redux/ducks';
+import { StyledHome } from '../styles/components/StyledHome';
 
 const Home: FC = () => {
   const [title, setTitle] = useState('');
@@ -62,35 +65,43 @@ const Home: FC = () => {
   };
 
   return (
-    <div>
-      <div>Posts</div>
-      <ul>
-        {posts.map((post) => (
-          <li className="post" key={post.id}>
-            <div>{post.title}</div>
-            <div>{post.body}</div>
-            <button type="button" onClick={() => onEdit(post.id)}>
-              edit
-            </button>
-            <button type="button" onClick={() => deletePost(post.id)}>
-              Delete
-            </button>
-            <button type="button" onClick={() => onMore(post.id)}>
-              More
-            </button>
-          </li>
-        ))}
-      </ul>
+    <StyledHome>
+      <h1>Messages</h1>
       <input
+        className="title__input"
         type="text"
         onChange={(e) => setTitle(e.target.value)}
         value={title}
       />
-      <textarea onChange={(e) => setBody(e.target.value)} value={body} />
-      <button type="button" onClick={addNewPost}>
-        Create
+      <textarea
+        className="body__textarea"
+        onChange={(e) => setBody(e.target.value)}
+        value={body}
+      />
+      <button className="create__btn" type="button" onClick={addNewPost}>
+        Create Post
       </button>
-    </div>
+      <ul className="post__list">
+        {posts.map((post) => (
+          <li className="post__item" key={post.id}>
+            <h3 className="post__item-title">{post.title}</h3>
+            <p className="post__item-body">{post.body}</p>
+            <MdModeEdit className="edit" onClick={() => onEdit(post.id)} />
+            <TiDeleteOutline
+              className="remove"
+              onClick={() => deletePost(post.id)}
+            />
+            <button
+              className="more__btn"
+              type="button"
+              onClick={() => onMore(post.id)}
+            >
+              More
+            </button>
+          </li>
+        ))}
+      </ul>{' '}
+    </StyledHome>
   );
 };
 
