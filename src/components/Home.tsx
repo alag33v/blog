@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { MdModeEdit } from 'react-icons/md';
+import { AppStateType } from '../redux/ducks';
 import {
   getPosts,
   createNewPost,
@@ -12,7 +13,6 @@ import {
   changePost,
 } from '../redux/ducks/postsDucks';
 import { Post } from '../types';
-import { AppStateType } from '../redux/ducks';
 import { StyledHome } from '../styles/components/StyledHome';
 
 const Home: FC = () => {
@@ -81,7 +81,7 @@ const Home: FC = () => {
       <button className="create__btn" type="button" onClick={addNewPost}>
         Create Post
       </button>
-      <ul className="post__list">
+      <ul className="posts__list">
         {posts.map((post) => (
           <li className="post__item" key={post.id}>
             <h3 className="post__item-title">{post.title}</h3>

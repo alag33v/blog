@@ -4,10 +4,15 @@ export const StyledHome = styled.div`
   h1 {
     font-size: 50px;
     text-align: center;
+
+    @media (max-width: 365px) {
+      font-size: 40px;
+    }
   }
 
   .title__input {
     width: 500px;
+    max-width: 100%;
     height: 40px;
     color: #fff;
     background-color: transparent;
@@ -20,6 +25,7 @@ export const StyledHome = styled.div`
 
   .body__textarea {
     width: 600px;
+    max-width: 100%;
     height: 200px;
     color: #fff;
     background-color: transparent;
@@ -39,6 +45,7 @@ export const StyledHome = styled.div`
     padding: 7px 20px;
     border-radius: 5px;
     width: 300px;
+    max-width: 100%;
     height: 40px;
     display: block;
     border: none;
@@ -54,15 +61,16 @@ export const StyledHome = styled.div`
     }
   }
 
-  .post__list {
+  .posts__list {
     list-style: none;
     margin: 0;
     padding: 0;
 
     .post__item {
       width: 600px;
+      max-width: 100%;
       margin: 0 auto 25px;
-      padding: 15px 25px;
+      padding: 15px 0;
       border: 1px dashed #ccc;
       border-radius: 5px;
       position: relative;
@@ -70,14 +78,18 @@ export const StyledHome = styled.div`
       &-title {
         font-size: 24px;
         text-align: center;
-        margin: 0 0 10px;
+        border-bottom: 1px dashed #ccc;
+        margin: 0 0 15px;
+        padding: 5px 60px 15px;
       }
 
       &-body {
         font-size: 18px;
         line-height: 1.3;
         text-align: justify;
-        margin: 5px 0;
+        border-bottom: 1px dashed #ccc;
+        margin: 5px 0 16px;
+        padding: 5px 25px 15px;
       }
 
       .edit {
@@ -107,12 +119,14 @@ export const StyledHome = styled.div`
           fill: #fff;
         }
       }
+
       .more__btn {
         color: rgb(255, 255, 255);
         background-color: rgb(135, 206, 250);
         margin: 0 auto;
         border-radius: 5px;
         width: 200px;
+        max-width: 100%;
         height: 34px;
         display: block;
         border: none;

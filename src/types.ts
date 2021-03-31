@@ -1,6 +1,7 @@
-type Comment = {
+export type Comment = {
   postId: number | string;
   body: string;
+  id?: number | string;
 };
 
 export type Post = {

@@ -2,25 +2,40 @@
 import { ThunkAction } from 'redux-thunk';
 import { toast } from 'react-toastify';
 import { AppStateType } from './index';
-import { Post } from '../../types';
-import { postsAPI } from '../../api/api';
+import { Post, Comment } from '../../types';
+import { postsAPI, commentsAPI } from '../../api/api';
 
 // Actions
 const ADD_POSTS = 'posts/ADD_POSTS';
 const NEW_POST = 'posts/NEW_POST';
 const DELETE_POST = 'posts/DELETE_POST';
 const EDIT_POST = 'posts/EDIT_POST';
+const ADD_COMMENT = 'posts/ADD_COMMENT';
+const CREATE_COMMENT = 'posts/CREATE_COMMENT';
 
 // Reducer
 type InitialStateType = {
   posts: Post[];
+  post: Post;
 };
 
 const initialState: InitialStateType = {
   posts: [],
+  post: {
+    id: '',
+    title: '',
+    body: '',
+    comments: [],
+  },
 };
 
-type ActionsType = AddPostsType | NewPostType | DeletePostType | EditPostType;
+type ActionsType =
+  | AddPostsType
+  | NewPostType
+  | DeletePostType
+  | EditPostType
+  | AddCommentType
+  | NewCommentType;
 
 export const postsReducer = (
   state = initialState,
@@ -40,8 +55,18 @@ export const postsReducer = (
       const posts = [...state.posts];
       const index = posts.findIndex((post) => post.id === action.payload.id);
       posts[index] = { ...action.payload };
-      return { posts };
+      return { posts, post: state.post };
     }
+    case ADD_COMMENT:
+      return { ...state, post: action.payload };
+    case CREATE_COMMENT:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: [...state.post.comments, action.payload],
+        },
+      };
     default:
       return state;
   }
@@ -53,7 +78,7 @@ type AddPostsType = {
   payload: Post[];
 };
 
-export const addPosts = (arr: Post[]): AddPostsType => ({
+const addPosts = (arr: Post[]): AddPostsType => ({
   type: ADD_POSTS,
   payload: arr,
 });
@@ -63,7 +88,7 @@ type NewPostType = {
   payload: Post;
 };
 
-export const newPost = (obj: Post): NewPostType => ({
+const newPost = (obj: Post): NewPostType => ({
   type: NEW_POST,
   payload: obj,
 });
@@ -73,7 +98,7 @@ type DeletePostType = {
   payload: number | string;
 };
 
-export const deletePost = (id: number | string): DeletePostType => ({
+const deletePost = (id: number | string): DeletePostType => ({
   type: DELETE_POST,
   payload: id,
 });
@@ -83,8 +108,28 @@ type EditPostType = {
   payload: Post;
 };
 
-export const editPost = (obj: Post): EditPostType => ({
+const editPost = (obj: Post): EditPostType => ({
   type: EDIT_POST,
+  payload: obj,
+});
+
+type AddCommentType = {
+  type: typeof ADD_COMMENT;
+  payload: Post;
+};
+
+const addComments = (obj: Post): AddCommentType => ({
+  type: ADD_COMMENT,
+  payload: obj,
+});
+
+type NewCommentType = {
+  type: typeof CREATE_COMMENT;
+  payload: Comment;
+};
+
+const newComment = (obj: Comment): NewCommentType => ({
+  type: CREATE_COMMENT,
   payload: obj,
 });
 
@@ -127,6 +172,30 @@ export const changePost = (obj: Post): ThunkType => async (dispatch) => {
     const data = await postsAPI.editPost(obj);
     dispatch(editPost(data));
     toast.success('Post edited');
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const getComments = (id: number | string): ThunkType => async (
+  dispatch,
+) => {
+  try {
+    const data = await commentsAPI.fetchComments(id);
+    dispatch(addComments(data));
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const createNewComment = (
+  id: number | string,
+  obj: Comment,
+): ThunkType => async (dispatch) => {
+  try {
+    const data = await commentsAPI.addComments(id, obj);
+    toast.success('Comment created');
+    dispatch(newComment(data));
   } catch (error) {
     toast.error(error.message);
   }
